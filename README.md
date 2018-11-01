@@ -1,5 +1,6 @@
 # On Evaluating the Generalization of LSTMs in Formal Languages
-This repository includes a PyTorch implementation of [On Evaluating the Generalization of LSTMs in Formal Languages](). Our paper will appear in the Proceedings of the Society for Computation in Linguistics (SCiL) 2019.
+* This repository includes a PyTorch implementation of [On Evaluating the Generalization of LSTMs in Formal Languages](). 
+* Our paper will appear in the Proceedings of the Society for Computation in Linguistics (SCiL) 2019.
 
 ## Requirements
 
