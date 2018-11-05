@@ -17,7 +17,7 @@ class MyLSTM(nn.Module):
 
         # layers
         self.lstm = nn.LSTM(vocab_size, hidden_dim, n_layers)
-        self.linear = nn.Linear(hidden_dim, vocab_size+1) ## vocab_size + 1 because of 
+        self.linear = nn.Linear(hidden_dim, vocab_size+1) ## vocab_size + 1 because of the termination symbol T
         self.sigmoid = nn.Sigmoid ()
 
     def init_hidden (self): 
