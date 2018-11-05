@@ -37,7 +37,6 @@ class SampleGenerator ():
 
         # normalize (to fix the small precision errors)
         pdf *= (1. / sum(pdf)) 
-
         return pdf
 
 
@@ -127,4 +126,3 @@ class SampleGenerator ():
             else:
                 print ('Error 2')
         return tensor
-

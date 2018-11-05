@@ -3,14 +3,12 @@
 * Our paper will appear in the Proceedings of the Society for Computation in Linguistics (SCiL) 2019.
 
 ## Requirements
-
 The code is written in Python, and requires PyTorch and a couple of other dependencies. If you would like to run the code locally, please install PyTorch by following the instructions on http://pytorch.org and then run the following command to install other required packages, which are listed inside `requirements.txt`:
 ```
 pip install -r requirements.txt
 ```
 
 ## Usage
-
 ### Training/Testing options
 #### Experiment options
 * `exp_type`: The experiment type. The choices are `single`, `distribution`, `window`, `hidden_units`. 

@@ -24,16 +24,9 @@ class MyLSTM(nn.Module):
         return (torch.zeros (self.hidden_layers, 1, self.hidden_dim)),(torch.zeros (self.hidden_layers, 1, self.hidden_dim))
 
     def forward(self, input, hidden0):
-        # apply the LSTM layer
         output, hidden = self.lstm(input, hidden0)
-
-        # apply the linear layer
         output = self.linear(output)
-        
-        # apply the softmax layer
         output = output.view (len(output), self.vocab_size + 1)
-        
-        # apply the sigmoid
         output = self.sigmoid (output)
 
         return output, hidden

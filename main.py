@@ -45,6 +45,7 @@ def get_args ():
     parser.add_argument ('--disp_err_n', type=int, default=5, help='The first k error values.')
     
     params, _ = parser.parse_known_args ()
+    
     # Print the entire list of params
     print(params)
 
@@ -268,7 +269,6 @@ def main(args):
         print ('Sorry, couldn\'t process your input; please try again.')
 
     print ('\nGoodbye...\n')
-
     return
 
 if __name__ == "__main__":
