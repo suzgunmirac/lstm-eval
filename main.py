@@ -246,7 +246,6 @@ def main(args):
     lang = args.language
     distrib = args.distribution
     window = [] 
-    
     for i in range (int(len(args.window)/2)):
         window.append([args.window[2 * i], args.window[2 * i + 1]])
     
