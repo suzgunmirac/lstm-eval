@@ -1,32 +1,31 @@
+## Import relevant libraries and dependencies
 import numpy as np
 import random
 import collections
 import math
-
 import torch
 from torch.autograd import Variable
-
 from scipy.special import gamma 
 from scipy.special import gammaln
 
 class SampleGenerator ():
     def __init__(self, vocabulary):
-        self.vocabulary = vocabulary # input vocab
+        self.vocabulary = vocabulary ## Input vocabulary
         self.vocab_size = len(self.vocabulary) 
 
-        self.all_letters = vocabulary + 'T' # output vocab (T: termination symbol)
+        self.all_letters = vocabulary + 'T' ## Output vocabulary (T: termination symbol)
         self.n_letters = len(self.all_letters)
 
-        self.extra_letter = chr(ord(vocabulary[-1]) + 1) # a or b
+        self.extra_letter = chr(ord(vocabulary[-1]) + 1) ## a or b (denoted a/b)
 
     def get_vocab (self):
         return self.vocabulary
 
-    # Beta-Binomial density
+    ## Beta-Binomial density (pdf)
     def beta_binom_density(self, alpha, beta, k, n):
         return 1.0*gamma(n+1)*gamma(alpha+k)*gamma(n+beta-k)*gamma(alpha+beta)/ (gamma(k+1)*gamma(n-k+1)*gamma(alpha+beta+n)*gamma(alpha)*gamma(beta))
 
-    # Beta-Binomial Distribution
+    ## Beta-Binomial Distribution
     def beta_bin_distrib (self, alpha, beta, N):
         pdf = np.zeros (N+1)
 
@@ -35,7 +34,7 @@ class SampleGenerator ():
             prob = self.beta_binom_density (alpha, beta, k, N)
             pdf [k] = prob
 
-        # normalize (to fix the small precision errors)
+        ## Normalize (to fix the small precision errors)
         pdf *= (1. / sum(pdf)) 
         return pdf
 
@@ -68,7 +67,8 @@ class SampleGenerator ():
         input_arr = []
         output_arr = []
 
-        domain = list(range(minv, maxv+1)) # domain = [minv, ...., maxv]
+        ## domain = [minv, ...., maxv]
+        domain = list(range(minv, maxv+1)) 
 
         nums = self.sample_from_a_distrib (domain, sample_size, distrib_type)
 
@@ -78,34 +78,35 @@ class SampleGenerator ():
             o_seq = ''
             for i in range (self.vocab_size):
                 if i == 0:
-                    o_seq += self.extra_letter * num
+                    o_seq += self.extra_letter * num ## a or b
                 elif i == 1:
-                    o_seq += self.vocabulary[i] * (num-1)
+                    o_seq += self.vocabulary[i] * (num-1) ## b
                 else:
-                    o_seq += self.vocabulary[i] * num
-            o_seq += 'T'
+                    o_seq += self.vocabulary[i] * num ## other letters
+            o_seq += 'T'  ## termination symbol
 
             input_arr.append (i_seq)
             output_arr.append (o_seq)
 
+        ## Display the distribution of lengths of the samples
         if distrib_display:
-            print ('Distribution of the samples: {}'.format(collections.Counter(nums)))
+            print ('Distribution of the length of the samples: {}'.format(collections.Counter(nums)))
 
         return input_arr, output_arr, collections.Counter(nums)
 
 
-    # Find letter index from all_letters
+    ## Find letter index from all_letters
     def letterToIndex (self, letter):
         return self.all_letters.find (letter)
 
-    # Just for demonstration, turn a letter into a <1 x n_letters> Tensor
+    ## Just for demonstration, turn a letter into a <1 x n_letters> Tensor
     def letterToTensor(self, letter):
         tensor = torch.zeros(1, self.n_letters)
         tensor[0][self.letterToIndex(letter)] = 1
         return tensor
 
-    # Turn a line into a <line_length x 1 x n_letters>,
-    # or an array of one-hot letter vectors
+    ## Turn a line into a <line_length x 1 x n_letters>,
+    ## or an array of one-hot letter vectors
     def lineToTensorInput(self, line):
         tensor = torch.zeros(len(line), 1, self.vocab_size)
         for li, letter in enumerate(line):

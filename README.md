@@ -20,27 +20,27 @@ pip install -r requirements.txt
 * `language`: The language in consideration. The choices are `ab`, `abc`, `abcd`, representing the languages <a href="https://www.codecogs.com/eqnedit.php?latex=a^n&space;b^n" target="_blank"><img src="https://latex.codecogs.com/gif.latex?a^n&space;b^n" title="a^n b^n" /></a>, <a href="https://www.codecogs.com/eqnedit.php?latex=a^n&space;b^n&space;c^n" target="_blank"><img src="https://latex.codecogs.com/gif.latex?a^n&space;b^n&space;c^n" title="a^n b^n c^n" /></a>, and <a href="https://www.codecogs.com/eqnedit.php?latex=a^n&space;b^n&space;c^n&space;d^n" target="_blank"><img src="https://latex.codecogs.com/gif.latex?a^n&space;b^n&space;c^n&space;d^n" title="a^n b^n c^n d^n" /></a>, respectively.
 
 #### Model and data options
-* `lstm_hlayers`: The number of hidden layers in the LSTM model. It should be a single integer. 
-* `n_trials`: The number of trials. It should be a single integer.
-* `n_epochs`: The number of epochs per trial. It should be a single integer.
-* `sample_size`: The number of training samples. It should be a single integer.
-* `disp_err_n`: The total number of <a href="https://www.codecogs.com/eqnedit.php?latex=e_i" target="_blank"><img src="https://latex.codecogs.com/gif.latex?e_i" title="e_i" /></a> values in consideration. It should be a single integer.
+* `lstm_hlayers`: The number of hidden layers in the LSTM model. It should be a single positive integer. 
+* `n_trials`: The number of trials. It should be a single positive integer.
+* `n_epochs`: The number of epochs per trial. It should be a single positive integer.
+* `sample_size`: The number of training samples. It should be a single positive integer.
+* `disp_err_n`: The total number of <a href="https://www.codecogs.com/eqnedit.php?latex=e_i" target="_blank"><img src="https://latex.codecogs.com/gif.latex?e_i" title="e_i" /></a> values in consideration. It should be a single positive integer.
 
 ## Three Simple Examples
 #### Experiment I: Different Trials with the Same Experiment Setup
-Suppose we would like to investigate the influence of random weight initialization on the inductive capabilities of LSTM models in the task of learning the CSL  <a href="https://www.codecogs.com/eqnedit.php?latex=a^n&space;b^n&space;c^n" target="_blank"><img src="https://latex.codecogs.com/gif.latex?a^n&space;b^n&space;c^n" title="a^n b^n c^n" /></a>. We may then run the following command:
+Suppose we would like to investigate the influence of random weight initialization on the inductive capabilities of LSTM models in the task of learning the CSL <a href="https://www.codecogs.com/eqnedit.php?latex=a^n&space;b^n&space;c^n" target="_blank"><img src="https://latex.codecogs.com/gif.latex?a^n&space;b^n&space;c^n" title="a^n b^n c^n" /></a>. We may then run the following command:
 ```
 python main.py --exp_type single --language abc --distribution uniform --window 1 50 --lstm_hunits 3 --disp_err_n 5
 ```
 
 #### Experiment II: Different Distribution Regimes
-Suppose we would like to investigate the influence of various distribution regimes on the inductive capabilities of LSTM models in the task of learning the CSL  <a href="https://www.codecogs.com/eqnedit.php?latex=a^n&space;b^n&space;c^n" target="_blank"><img src="https://latex.codecogs.com/gif.latex?a^n&space;b^n&space;c^n" title="a^n b^n c^n" /></a>. We may then run the following command:
+Suppose we would like to investigate the influence of various distribution regimes on the inductive capabilities of LSTM models in the task of learning the CSL <a href="https://www.codecogs.com/eqnedit.php?latex=a^n&space;b^n&space;c^n" target="_blank"><img src="https://latex.codecogs.com/gif.latex?a^n&space;b^n&space;c^n" title="a^n b^n c^n" /></a>. We may then run the following command:
 ```
 python main.py --exp_type distribution --language abc --distribution uniform u_shaped left_tailed right_tailed --window 1 50 --lstm_hunits 3 --disp_err_n 5
 ```
 
 #### Experiment III: Different Training Windows
-Suppose we would like to investigate the influence of the training window on the inductive capabilities of LSTM models in the task of learning the CSL  <a href="https://www.codecogs.com/eqnedit.php?latex=a^n&space;b^n&space;c^n" target="_blank"><img src="https://latex.codecogs.com/gif.latex?a^n&space;b^n&space;c^n" title="a^n b^n c^n" /></a>. Assuming that we are considering three training windows `[1, 30]`, `[1,50]`, and `[50, 100]`, we may want to run the following command:
+Suppose we would like to investigate the influence of the training window on the inductive capabilities of LSTM models in the task of learning the CSL  <a href="https://www.codecogs.com/eqnedit.php?latex=a^n&space;b^n&space;c^n" target="_blank"><img src="https://latex.codecogs.com/gif.latex?a^n&space;b^n&space;c^n" title="a^n b^n c^n" /></a>. Assuming that we are considering three training windows `[1, 30]`, `[1,50]`, and `[50, 100]`, we may then run the following command:
 ```
 python main.py --exp_type window --language abc --distribution uniform --window 1 30 1 50 50 100 --lstm_hunits 3 --disp_err_n 5
 ```
@@ -48,11 +48,12 @@ python main.py --exp_type window --language abc --distribution uniform --window 
 ## Citation
 If you would like to cite our work, please use the following BibTeX format:
 ```
-@article{,
-  title={On Evaluating the Generalization of LSTMs in Formal Languages},
+@InProceedings{suzgun:2019:SCiL,
+  title={On Evaluating the Generalization of LSTM Models in Formal Languages},
   author={Suzgun, Mirac and Belinkov, Yonatan and Shieber, Stuart M.},
-  journal={},
-  year={2018}
+  booktitle={Proceedings of the Society for Computation in Linguistics (SCiL)},
+  year={2019},
+  month={January}
 }
 ```
 

@@ -1,15 +1,13 @@
+## Import relevant libraries and dependencies
 import numpy as np
 import argparse
 import sys
 import random
-
 import matplotlib
 import matplotlib.pyplot as plt
-
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
-
 from sample_generator import SampleGenerator
 from model import MyLSTM
 
@@ -18,35 +16,33 @@ MAX_INT = sys.maxsize
 
 first_k_errors = 5
 
-# EPSILON VALUE
+## EPSILON VALUE -- Output threshold 
 epsilon = 0.5
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu") ## GPU 
 
 def get_args ():
-    parser = argparse.ArgumentParser(description='Training an LSTM model')
+    parser = argparse.ArgumentParser(description='Let us train an LSTM model.')
 
-    # experiment type
+    ## Experiment type
     parser.add_argument ('--exp_type', required=True, type=str, default='single', choices=['single', 'distribution', 'window', 'hidden_units'], help='The experiment type.')
 
-    # required params
+    ## Required params
     parser.add_argument ('--language', type=str, default='abc', choices=['ab', 'abc', 'abcd'], help='The language in consideration.')
     parser.add_argument ('--distribution', type=str, default=['uniform'], nargs='*', choices = ['uniform', 'u-shaped', 'left-tailed', 'right-tailed'], help='A list of distribution regimes for our training set (e.g. \'uniform\' \'u_shaped\' \'left_tailed\' \'right_tailed\').')
     parser.add_argument ('--window', type=int, default=[1,50], nargs='*',help='A list of length windows for our training set (e.g. 1 30 1 50 50 100 for 1-30, 1-50, 50-100).')
     parser.add_argument ('--lstm_hunits', type=int, default=[3], nargs='*', help='A list of hidden units for our LSTM for a given language (e.g. 4 10 36).')
     
-    # optional params
+    ## Optional params
     parser.add_argument ('--lstm_hlayers', type=int, default=1, help='The number of layers in the LSTM network.')
-
     parser.add_argument ('--sample_size', type=int, default=1000, help='The total number of training samples.')
     parser.add_argument ('--n_epochs', type=int, default=150, help='The total number of epochs.')
     parser.add_argument ('--n_trials', type=int, default=10, help='The total number of trials.') 
-
     parser.add_argument ('--disp_err_n', type=int, default=5, help='The first k error values.')
     
     params, _ = parser.parse_known_args ()
     
-    # Print the entire list of params
+    ## Print the entire list of parameters
     print(params)
 
     return params
@@ -57,12 +53,15 @@ def plot_graphs (lang, info, labels, accuracy_vals, loss_vals, window, filename)
 
     domain = list(range(1, accuracy_vals.shape[2] + 1))
 
-    # for plotting purposes
+    ## For plotting purposes...
+    ## Uncomment the following line if you would like to bound the plot window by the maximum e_k value (Ref 1)
     # max_y = np.max(accuracy_vals) + 10
     
     e_nums = [1, first_k_errors] 
 
+    ## Lower training threshold
     border1 = np.ones(len(domain)) * window[0]
+    ## Upper training threshold
     border2 = np.ones(len(domain)) * window[1]
 
     for err_n in e_nums:
@@ -84,7 +83,7 @@ def plot_graphs (lang, info, labels, accuracy_vals, loss_vals, window, filename)
         plt.title('Generalization Graph for ${}$'.format(lang_str))
         plt.xlabel ('Epoch Number')
         plt.ylabel ('$e_{}$ Value'.format(str(err_n)))
-        # for plotting purposes
+        ## For plotting purposes (Ref 1)
         # plt.ylim ([0, max_y])
         plt.savefig('./figures/{}_error_{}'.format(filename, str(err_n)),dpi=256)
     return
@@ -94,15 +93,19 @@ def single_investigation (lang, distrib, h_layers, h_units, window, sample_size,
     loss_per_d = []
 
     generator = SampleGenerator(lang)
+    ## If you would like to fix your training set during the entire course of investigation, 
+    ## you should uncomment the following line (and comment the same line in the subsequent "for" loop);
+    ## otherwise, each training set will come from the same distribution and same window but be different.
+    inputs, outputs, s_dst = generator.generate_sample (sample_size, window[0], window[1], distrib, False)
     for _ in range(exp_num):
-        inputs, outputs, s_dst = generator.generate_sample (sample_size, window[0], window[1], distrib, False)
+        # inputs, outputs, s_dst = generator.generate_sample (sample_size, window[0], window[1], distrib, False)
         e_vals, loss_vals = train (generator, distrib, h_layers, h_units, inputs, outputs, n_epochs, 1) # each experiment is unique
         acc_per_d.append (e_vals)
         loss_per_d.append(loss_vals)
 
     filename = '{}_{}_{}_{}_{}_{}_{}'.format(lang, 'single', distrib, h_layers, h_units, window[0], window[1])
 
-    # Uncomment the following line if you would like to save the e_i and loss values.
+    ## Uncomment the following line if you would like to save the e_i and loss values.
     # np.savez('./results/result_{}.npz'.format(filename), errors = np.array(e_vals), losses = np.array (loss_vals))
 
     trials_label = ['Experiment {}'.format(elt) for elt in range (1, exp_num + 1)]
@@ -115,8 +118,12 @@ def hidden_units_investigation (lang, distrib, h_layers, h_units, window, sample
     loss_per_d = []
 
     generator = SampleGenerator(lang)
+    ## If you would like to fix your training set during the entire course of investigation, 
+    ## you should uncomment the following line (and comment the same line in the subsequent "for" loop);
+    ## otherwise, each training set will come from the same distribution and same window but be different.
+    inputs, outputs, s_dst = generator.generate_sample (sample_size, window[0], window[1], distrib, False)
     for hidden_dim in h_units:
-        inputs, outputs, s_dst = generator.generate_sample (sample_size, window[0], window[1], distrib, False)
+        # inputs, outputs, s_dst = generator.generate_sample (sample_size, window[0], window[1], distrib, False)
         e_vals, loss_vals = train (generator, distrib, h_layers, hidden_dim, inputs, outputs, n_epochs, exp_num)
         acc_per_d.append (e_vals)
         loss_per_d.append(loss_vals)
@@ -141,7 +148,7 @@ def window_investigation (lang, distrib, h_layers, h_units, windows, sample_size
 
     filename = '{}_{}_{}_{}_{}'.format(lang, 'window', distrib, h_layers, h_units)
     window_label = ['Window [{}, {}]'.format(elt[0], elt[1]) for elt in windows]
-    plot_graphs (lang, 'window', window_label, acc_per_d, loss_per_d, [1, 30], filename) # [1, 30] is a random window. We'll ignore it later on.
+    plot_graphs (lang, 'window', window_label, acc_per_d, loss_per_d, [1, 30], filename) # [1, 30] is a random window. We'll ignore it later.
 
     return acc_per_d, loss_vals
 
@@ -204,7 +211,7 @@ def train (generator, distrib, h_layers, h_units, inputs, outputs, n_epochs, exp
     for exp in range (exp_num):
         print ('Experiment Number: {}'.format(exp+1))
 
-        # create the model
+        ## Create the LSTM model
         lstm = MyLSTM(h_units, vocab_size, h_layers).to(device) 
         learning_rate = .01 ## learning rate
         
@@ -234,7 +241,7 @@ def train (generator, distrib, h_layers, h_units, inputs, outputs, n_epochs, exp
         # print ('Loss array: ', loss_arr)
         # print ('Max Gen: ', first_errors)
 
-        # We can save the models as we train.
+        ## We can save the models as we train.
         # rnn_path = './lstm_lang{}_distrib_{}_expn_{}.pth'.format(lang, distrib, str(exp))
         # torch.save (lstm, rnn_path)
 
@@ -242,7 +249,6 @@ def train (generator, distrib, h_layers, h_units, inputs, outputs, n_epochs, exp
 
 def main(args):
     global first_k_errors
-
     investigation = args.exp_type
     lang = args.language
     distrib = args.distribution
@@ -266,7 +272,7 @@ def main(args):
     elif investigation == 'single':
         single_investigation (lang, distrib[0], n_layers, n_units[0], window[0], s_size, n_epochs, n_trials)
     else:
-        print ('Sorry, couldn\'t process your input; please try again.')
+        print ('Sorry, we couldn\'t process your input; could you please try again?')
 
     print ('\nGoodbye...\n')
     return
