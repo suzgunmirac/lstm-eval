@@ -1,6 +1,6 @@
 ## Import relevant libraries and dependencies
-import numpy as np
 import argparse
+import numpy as np
 import sys
 import random
 import matplotlib
@@ -8,17 +8,19 @@ import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
-from sample_generator import SampleGenerator
 from model import MyLSTM
+from sample_generator import SampleGenerator
 
 
 MAX_INT = sys.maxsize
 
+# Default value: 5
 first_k_errors = 5
 
-## EPSILON VALUE -- Output threshold 
+## Epsilon value -- output threshold (during test time)
 epsilon = 0.5
 
+# For GPU usage
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu") ## GPU 
 
 def get_args ():
@@ -211,9 +213,10 @@ def train (generator, distrib, h_layers, h_units, inputs, outputs, n_epochs, exp
     for exp in range (exp_num):
         print ('Experiment Number: {}'.format(exp+1))
 
-        ## Create the LSTM model
+        # Create the model
         lstm = MyLSTM(h_units, vocab_size, h_layers).to(device) 
-        learning_rate = .01 ## learning rate
+        # In our experiments, a value between 0.01 and 0.001 worked well
+        learning_rate = .01 ## learning rate 
         
         criterion = nn.MSELoss() ## MSE Loss
         optim = torch.optim.RMSprop(lstm.parameters(), lr = learning_rate) ## RMSProp optimizer
@@ -222,17 +225,21 @@ def train (generator, distrib, h_layers, h_units, inputs, outputs, n_epochs, exp
         first_errors = []
 
         for it in range(1, n_epochs + 1):
+            # total loss per epoch
+            total_loss = 0
             for i in range (training_size):
                 lstm.zero_grad ()
                 h0, c0 = lstm.init_hidden()
                 output, hidden = lstm (generator.lineToTensorInput(inputs[i]).to(device), (h0.to(device), c0.to(device)))
                 target = generator.lineToTensorOutput(outputs[i]).to(device) 
+                # loss for a single sample
                 loss = criterion (output, target)
                 loss.backward ()
                 optim.step ()
+                total_loss += loss.item()
 
                 if i == training_size - 1: ## one full pass of the training set
-                    loss_arr.append (loss.item()) ## add loss val
+                    loss_arr.append (total_loss) ## add loss val
                     first_errors.append(test(generator, lstm)) ## add e_i vals
 
         loss_arr_per_iter.append (loss_arr)
@@ -274,7 +281,7 @@ def main(args):
     else:
         print ('Sorry, we couldn\'t process your input; could you please try again?')
 
-    print ('\nGoodbye...\n')
+    print ('\nGoodbye!..\n')
     return
 
 if __name__ == "__main__":

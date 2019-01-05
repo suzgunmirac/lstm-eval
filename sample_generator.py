@@ -34,7 +34,7 @@ class SampleGenerator ():
             prob = self.beta_binom_density (alpha, beta, k, N)
             pdf [k] = prob
 
-        ## Normalize (to fix the small precision errors)
+        ## Normalize (to fix small precision errors)
         pdf *= (1. / sum(pdf)) 
         return pdf
 
@@ -99,7 +99,7 @@ class SampleGenerator ():
     def letterToIndex (self, letter):
         return self.all_letters.find (letter)
 
-    ## Just for demonstration, turn a letter into a <1 x n_letters> Tensor
+    ## Just for demonstration, turn a letter into a <1 x n_letters> tensor
     def letterToTensor(self, letter):
         tensor = torch.zeros(1, self.n_letters)
         tensor[0][self.letterToIndex(letter)] = 1

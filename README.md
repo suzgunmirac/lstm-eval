@@ -1,9 +1,9 @@
 # On Evaluating the Generalization of LSTMs in Formal Languages
 * This repository includes a PyTorch implementation of [On Evaluating the Generalization of LSTMs in Formal Languages](https://arxiv.org/abs/1811.01001). 
-* Our paper will appear in the Proceedings of the Society for Computation in Linguistics (SCiL) 2019.
+* Our paper appeared in the Proceedings of the Society for Computation in Linguistics (SCiL) 2019.
 
 ## Requirements
-The code is written in Python, and requires PyTorch and a couple of other dependencies. If you would like to run the code locally, please install PyTorch by following the instructions on http://pytorch.org and then run the following command to install other required packages, which are listed inside `requirements.txt`:
+The code is written in Python, and requires PyTorch and a couple of other dependencies. If you would like to run the code locally, please install PyTorch by following the instructions on http://pytorch.org and then run the following command to install the other required packages, which are listed inside `requirements.txt`:
 ```
 pip install -r requirements.txt
 ```
@@ -28,7 +28,7 @@ pip install -r requirements.txt
 
 ## Three Simple Examples
 #### Experiment I: Different Trials with the Same Experiment Setup
-Suppose we would like to investigate the influence of random weight initialization on the inductive capabilities of LSTM models in the task of learning the CSL <a href="https://www.codecogs.com/eqnedit.php?latex=a^n&space;b^n&space;c^n" target="_blank"><img src="https://latex.codecogs.com/gif.latex?a^n&space;b^n&space;c^n" title="a^n b^n c^n" /></a>. We may then run the following command:
+Suppose we would like to investigate the influence of weight initialization on the inductive capabilities of LSTM models in the task of learning the CSL <a href="https://www.codecogs.com/eqnedit.php?latex=a^n&space;b^n&space;c^n" target="_blank"><img src="https://latex.codecogs.com/gif.latex?a^n&space;b^n&space;c^n" title="a^n b^n c^n" /></a>. We may then run the following command:
 ```
 python main.py --exp_type single --language abc --distribution uniform --window 1 50 --lstm_hunits 3 --disp_err_n 5
 ```
@@ -40,7 +40,7 @@ python main.py --exp_type distribution --language abc --distribution uniform u_s
 ```
 
 #### Experiment III: Different Training Windows
-Suppose we would like to investigate the influence of the training window on the inductive capabilities of LSTM models in the task of learning the CSL  <a href="https://www.codecogs.com/eqnedit.php?latex=a^n&space;b^n&space;c^n" target="_blank"><img src="https://latex.codecogs.com/gif.latex?a^n&space;b^n&space;c^n" title="a^n b^n c^n" /></a>. Assuming that we are considering three training windows `[1, 30]`, `[1,50]`, and `[50, 100]`, we may then run the following command:
+Suppose we would like to investigate the influence of the training window on the inductive capabilities of LSTM models in the task of learning the CSL <a href="https://www.codecogs.com/eqnedit.php?latex=a^n&space;b^n&space;c^n" target="_blank"><img src="https://latex.codecogs.com/gif.latex?a^n&space;b^n&space;c^n" title="a^n b^n c^n" /></a>. Assuming that we are considering three training windows `[1, 30]`, `[1,50]`, and `[50, 100]`, we may then run the following command:
 ```
 python main.py --exp_type window --language abc --distribution uniform --window 1 30 1 50 50 100 --lstm_hunits 3 --disp_err_n 5
 ```
@@ -48,14 +48,17 @@ python main.py --exp_type window --language abc --distribution uniform --window 
 ## Citation
 If you would like to cite our work, please use the following BibTeX format:
 ```
-@InProceedings{suzgun:2019:SCiL,
+@InProceedings{suzgun2019evaluating,
   title={On Evaluating the Generalization of LSTM Models in Formal Languages},
   author={Suzgun, Mirac and Belinkov, Yonatan and Shieber, Stuart M.},
-  booktitle={Proceedings of the Society for Computation in Linguistics (SCiL)},
+  journal={Proceedings of the Society for Computation in Linguistics (SCiL)},
+  pages={277--286},
   year={2019},
   month={January}
 }
 ```
+
+Thanks!
 
 ## Acknowledgement
 We thank Sebastian Gehrmann of Harvard SEAS for his insightful comments and discussions.

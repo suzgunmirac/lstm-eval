@@ -1,11 +1,12 @@
 ## Import relevant libraries and dependencies
+
 import numpy as np
 import torch
 from torch.autograd import Variable
 import torch.nn as nn
 import random
 
-## LSTM Architecture
+## Single-layer LSTM architecture
 class MyLSTM(nn.Module):
     def __init__(self, hidden_dim, vocab_size, n_layers):
         super(MyLSTM, self).__init__()
