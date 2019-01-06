@@ -48,7 +48,7 @@ python main.py --exp_type window --language abc --distribution uniform --window 
 ## Citation
 If you would like to cite our work, please use the following BibTeX format:
 ```
-@InProceedings{suzgun2019lstmeval,
+@InProceedings{suzgun2019evaluating,
   title={On Evaluating the Generalization of LSTM Models in Formal Languages},
   author={Suzgun, Mirac and Belinkov, Yonatan and Shieber, Stuart M.},
   journal={Proceedings of the Society for Computation in Linguistics (SCiL)},
