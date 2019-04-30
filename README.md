@@ -36,7 +36,7 @@ python main.py --exp_type single --language abc --distribution uniform --window 
 #### Experiment II: Different Distribution Regimes
 Suppose we would like to investigate the influence of various distribution regimes on the inductive capabilities of LSTM models in the task of learning the CSL <a href="https://www.codecogs.com/eqnedit.php?latex=a^n&space;b^n&space;c^n" target="_blank"><img src="https://latex.codecogs.com/gif.latex?a^n&space;b^n&space;c^n" title="a^n b^n c^n" /></a>. We may then run the following command:
 ```
-python main.py --exp_type distribution --language abc --distribution uniform u_shaped left_tailed right_tailed --window 1 50 --lstm_hunits 3 --disp_err_n 5
+python main.py --exp_type distribution --language abc --distribution uniform u-shaped left-tailed right-tailed --window 1 50 --lstm_hunits 3 --disp_err_n 5
 ```
 
 #### Experiment III: Different Training Windows
